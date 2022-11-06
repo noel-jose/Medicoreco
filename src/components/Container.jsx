@@ -10,12 +10,19 @@ import { ethers } from "ethers";
 function Checkproduct() {
   const [result,getresult] = useState(true);
 
-  const [ProductInfo, setProductInfo] = useState({
+  const [PatientInfo, setPatientInfo] = useState({
     creator: "",
-    productName: "",
-    productId: "",
+    patientName: "",
+    patientId: "",
     date: "",
-    states: []
+    gender:"",
+    yearofbirth:"",
+    patientaddress:"",
+    mobilenumber:"",
+    treatments: [],
+    dates:[]
+  
+
   });
 
   useEffect(() => {
@@ -38,24 +45,34 @@ function Checkproduct() {
   
     const provider = new ethers.providers.Web3Provider(window.ethereum);
 
-    const Product = new ethers.Contract(
+    const Patient= new ethers.Contract(
       "0x9b91111a2fd76a023e48479bc532540b32a5c00c",
       abi,
       provider
     );
-    const response = await Product.getItem(parseInt(data.get("pid")));
+    const response = await Patient.getItem(parseInt(data.get("pid")));
     console.log(response);
     const creator = response.creator;
-    const productName = response.productName;
-    const productId = response.productId.toNumber();
+    const patientName = response.patientName;
+    const patientId = response.patientId.toNumber();
     const date = response.date;
-    const states = response.states;
-    setProductInfo({
+    const gender= response.gender;
+    const yearofbirth= response.yearofbirth;
+    const patientaddress= response.patientaddress;
+    const mobilenumber= response.mobilenumber;
+    const treatments= response.treatments;
+    const dates= response.dates;
+    setPatientInfo({
       creator: creator,
-      productName: productName,
-      productId: productId,
+      patientName: patientName,
+      patientId: patientId,
       date: date,
-      states: states
+      gender:gender,
+      yearofbirth:yearofbirth,
+      patientaddress:patientaddress,
+      mobilenumber:mobilenumber,
+      treatments:treatments,
+      dates:dates
     });
   };
 
@@ -71,9 +88,9 @@ function Checkproduct() {
           </div>
           {result ? 
           <div className='bg-white rounded m-7 flex flex-col justify-center px-7 py-4'>
-            <p>Product Name : {ProductInfo.productName}</p>
-            <p>Registerd By : {ProductInfo.creator} </p>
-            <p>Manufacture Date: {ProductInfo.date}</p>
+            <p>Patient Name : {PatientInfo.productName}</p>
+            <p>Registerd By : {PatientInfo.creator} </p>
+            <p>Manufacture Date: {PatientInfo.date}</p>
 
           </div>
           : <></>}

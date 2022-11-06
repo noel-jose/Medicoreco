@@ -14,19 +14,19 @@ function Home() {
           href="/addproduct"
           className="text-4xl p-2 tracking-tighter hover:scale-110 ease-in duration-300"
         >
-          ADD PRODUCT
+          ADD PATIENT
         </a>
         <a
           href="/checkproduct"
           className="text-4xl p-2 tracking-tighter hover:scale-110 ease-in duration-300"
         >
-          CHECK PRODUCT
+          CHECK PATIENT DETAILS
         </a>
         <a
           href="/updatelocation"
           className="text-4xl p-2 tracking-tighter hover:scale-110 ease-in duration-300"
         >
-          UPDATE LOCATION
+          ADD PATIENT MEDICAL REPORT
         </a>
       </div>
       <div className="mt-8 bg-yellow-200 opacity-80 rounded-md p-3">

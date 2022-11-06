@@ -13,6 +13,7 @@ contract PatientManagement{
        address creator;
        string patientName;
        uint256 patientId;
+       //string adhaar;
        string date;
        string gender;
        string yearofbirth;
@@ -26,7 +27,7 @@ contract PatientManagement{
    mapping(uint256 => Patient) allPatients;
    uint256 totalPatients = 0;
    //"0x5B38Da6a701c568545dCfcB03FcB875f56beddC4", "iwatch 2", "2000"
-   function addPatient(address _creator, string memory _patientName, string memory _date,string memory _gender,string memory _yearofbirth,string memory _patientaddress,string memory _mobilenumber, string memory _filecid) public returns(uint256){
+   function addPatient(address _creator, string memory _patientName,string memory _date,string memory _gender,string memory _yearofbirth,string memory _patientaddress,string memory _mobilenumber, string memory _filecid) public returns(uint256){
        string[] memory _treatments;
        string[] memory _dates;
        Patient memory newPatient = Patient({creator: _creator,patientName: _patientName,patientId: totalPatients, date : _date, gender:_gender,yearofbirth:_yearofbirth,patientaddress:_patientaddress,mobilenumber:_mobilenumber,treatments : _treatments, dates:_dates, filecid:_filecid});

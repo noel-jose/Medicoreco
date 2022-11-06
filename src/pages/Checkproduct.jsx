@@ -10,7 +10,6 @@ import {
 } from "react-vertical-timeline-component";
 import "react-vertical-timeline-component/style.min.css";
 import { Html5Qrcode } from "html5-qrcode";
-import { data } from "autoprefixer";
 
 // to handle the qr code uploaded
 const handleQrUpload = (e) => {
@@ -36,12 +35,16 @@ const handleQrUpload = (e) => {
 function Checkproduct() {
   const [result, setresult] = useState(false);
 
-  const [ProductInfo, setProductInfo] = useState({
+  const [PatientInfo, setPatientInfo] = useState({
     creator: "",
-    productName: "",
-    productId: "",
+    patientName: "",
+    patientId: "",
     date: "",
-    states: [],
+    gender: "",
+    yearofbirth: "",
+    patientaddress: "",
+    mobilenumber: "",
+    treatments: [],
     dates: [],
     fileCid: "",
   });
@@ -91,28 +94,36 @@ function Checkproduct() {
 
     const provider = new ethers.providers.Web3Provider(window.ethereum);
 
-    const Product = new ethers.Contract(
-      "0x9d607ea48fb9f9537e3f08ccbf8d4b9acb3638da",
+    console.log(parseInt(data.get("pid")));
+
+    const Patient = new ethers.Contract(
+      "0xF5Abdc1d50117aB2e4908154EC78b1473B12c49F",
       abi,
       provider
     );
-    const response = await Product.getItem(parseInt(data.get("pid")));
+    const response = await Patient.getPatient(parseInt(data.get("pid")));
     console.log(response);
     const creator = response.creator;
-    const productName = response.productName;
-    const productId = response.productId.toNumber();
+    const patientName = response.patientName;
+    const patientId = response.patientId.toNumber();
     const date = response.date;
-    const states = response.states;
+    const gender = response.gender;
+    const yearofbirth = response.yearofbirth;
+    const patientaddress = response.patientaddress;
+    const mobilenumber = response.mobilenumber;
+    const treatments = response.treatments;
     const dates = response.dates;
-    const fileCid = response.filecid;
-    setProductInfo({
+    setPatientInfo({
       creator: creator,
-      productName: productName,
-      productId: productId,
+      patientName: patientName,
+      patientId: patientId,
       date: date,
-      states: states,
+      gender: gender,
+      yearofbirth: yearofbirth,
+      patientaddress: patientaddress,
+      mobilenumber: mobilenumber,
+      treatments: treatments,
       dates: dates,
-      fileCid: fileCid,
     });
     setresult(true);
   };
@@ -123,7 +134,7 @@ function Checkproduct() {
       <div className="flex items-center justify-center pt-20">
         <div className="flex flex-col">
           <Searchbox handlePollData={handlePollData} />
-          <div>
+          {/* <div>
             <label className="flex items-center justify-center">
               <input
                 className="hidden"
@@ -135,47 +146,75 @@ function Checkproduct() {
               <img src="/logos/qr-code.png" alt="" />
               <p className="text-white ml-2">Scan QR</p>
             </label>
-          </div>
-          {result && ProductInfo.productName != "" ? (
+          </div> */}
+          {result && PatientInfo.patientName != "" ? (
             <div className="bg-white rounded m-7 flex flex-col justify-center px-7 py-4">
               <div className="m-1">
-                <div className="text-xs text-gray-700"> Product Name</div>
+                <div className="text-xs text-gray-700"> Patient Name</div>
                 <div className="font-semibold text-lg ">
-                  {ProductInfo.productName}
+                  {PatientInfo.patientName}
                 </div>
               </div>
               <div className="m-1">
                 <div className="text-xs text-gray-700"> Registered By</div>
                 <div className="font-semibold text-lg">
-                  {ProductInfo.creator}
+                  {PatientInfo.creator}
+                </div>
+              </div>
+              {/*<div className="m-1">
+                <div className="text-xs text-gray-700"> Adhaar ID</div>
+                <div className="font-semibold text-lg">{PatientInfo.date}</div>
+          </div>*/}
+              <div className="m-1">
+                <div className="text-xs text-gray-700"> Date</div>
+                <div className="font-semibold text-lg">{PatientInfo.date}</div>
+              </div>
+              <div className="m-1">
+                <div className="text-xs text-gray-700"> Year of Birth</div>
+                <div className="font-semibold text-lg">
+                  {PatientInfo.yearofbirth}
                 </div>
               </div>
               <div className="m-1">
-                <div className="text-xs text-gray-700"> Manufactured Date</div>
-                <div className="font-semibold text-lg">{ProductInfo.date}</div>
+                <div className="text-xs text-gray-700"> Gender</div>
+                <div className="font-semibold text-lg">
+                  {PatientInfo.gender}
+                </div>
               </div>
-              {ProductInfo.fileCid && (
+              <div className="m-1">
+                <div className="text-xs text-gray-700"> Patient Address</div>
+                <div className="font-semibold text-lg">
+                  {PatientInfo.patientaddress}
+                </div>
+              </div>
+              <div className="m-1">
+                <div className="text-xs text-gray-700"> Mobile Number</div>
+                <div className="font-semibold text-lg">
+                  {PatientInfo.mobilenumber}
+                </div>
+              </div>
+              {PatientInfo.fileCid && (
                 <div className="m-1">
                   <div className="text-xs text-gray-700"> Files: </div>
                   <a
                     className="text-lg text-blue-700"
-                    href={"https://" + ProductInfo.fileCid + ".ipfs.dweb.link/"}
+                    href={"https://" + PatientInfo.fileCid + ".ipfs.dweb.link/"}
                   >
-                    {"https://" + ProductInfo.fileCid + ".ipfs.dweb.link/"}
+                    {"https://" + PatientInfo.fileCid + ".ipfs.dweb.link/"}
                   </a>
                 </div>
               )}
             </div>
           ) : (
             <div className="bg-white rounded m-7 flex flex-col justify-center px-7 py-4">
-              Oops! Given product id cannot be found!
+              Oops! Given patient id cannot be found!
             </div>
           )}
 
           <div>
-            {ProductInfo.states.length > 0 ? (
+            {PatientInfo.treatments.length > 0 ? (
               <VerticalTimeline>
-                {ProductInfo.states.map((state, index) => (
+                {PatientInfo.treatments.map((state, index) => (
                   <VerticalTimelineElement
                     key={index}
                     className="vertical-timeline-element--work"
@@ -189,7 +228,7 @@ function Checkproduct() {
                       {state}
                     </h3>
                     <h4 className="vertical-timeline-element-subtitle font-light text-xs ">
-                      {ProductInfo.dates[index]}
+                      {PatientInfo.dates[index]}
                     </h4>
                   </VerticalTimelineElement>
                 ))}

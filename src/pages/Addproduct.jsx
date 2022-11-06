@@ -52,24 +52,25 @@ function Addproduct() {
   const handleAddProduct = async (e) => {
     e.preventDefault();
     const data = new FormData(e.target);
+    console.log(data);
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
     const signer = await provider.getSigner();
     const signerAddr = await signer.getAddress();
-    const Product2 = new ethers.Contract(
-      "0x9d607ea48fb9f9537e3f08ccbf8d4b9acb3638da",
+    const Patient2 = new ethers.Contract(
+      "0xF5Abdc1d50117aB2e4908154EC78b1473B12c49F",
       abi,
       signer
     );
-    const res = await Product2.getPid();
-    console.log("---------------------------------");
-    console.log(res.toNumber());
-    const pid = res.toNumber() + 1;
-    // const qrc = pid + 1;
-    
+    // const res = await Product2.getPid();
+    // console.log("---------------------------------");
+    // console.log(res.toNumber());
+    // const pid = res.toNumber() + 1;
+    // // const qrc = pid + 1;
+
     console.log(pid);
-    const Product = new ethers.Contract(
-      "0x9d607ea48fb9f9537e3f08ccbf8d4b9acb3638da",
+    const Patient = new ethers.Contract(
+      "0xF5Abdc1d50117aB2e4908154EC78b1473B12c49F",
       abi,
       signer
     );
@@ -77,18 +78,21 @@ function Addproduct() {
     console.log(data.get("pname"));
     // console.log(data.get("pid"));
     console.log(data.get("date"));
+    console.log(data.get("pid"));
     console.log("---------");
-    console.log(rootCid);
-    await Product.addItem(
+    //console.log(rootCid);
+    var t = await Patient.addPatient(
       signerAddr.toString(),
       data.get("pname"),
       data.get("date"),
-      rootCid
+      data.get("gender"),
+      data.get("age"),
+      data.get("address"),
+      data.get("mob"),
+      ""
     );
     // setisOpen(true);
-    console.log(pid.toString());
-    generateQR(pid.toString());
-    setPid(pid);
+    //setPid(pid);
   };
 
   return (
@@ -96,12 +100,12 @@ function Addproduct() {
       <Navbar />
       <div className="h-screen w-screen flex items-center justify-center ">
         <div className="bg-white rounded m-7 flex flex-col justify-center items-center px-10 py-4">
-          <h2 className="text-gray-700 font-semibold text-lg my-3">
-            Please fill product details
-          </h2>
+          <h1 className="text-gray-700 font-semibold text-lg my-3">
+            Please Fill Patient Details
+          </h1>
 
           <form className="flex flex-col" onSubmit={handleAddProduct}>
-            <label htmlFor="">Product Name</label>
+            <label htmlFor="">Patient Name</label>
             <input
               type="text"
               name="pname"
@@ -110,14 +114,14 @@ function Addproduct() {
               aria-describedby="button-addon2"
             />
 
-            {/* <label htmlFor="">Product ID</label>
+            {/*<label htmlFor="">Adhaar ID</label>
             <input
               type="text"
-              name="pid"
+              name="adhaar"
               class="form-control relative flex-auto min-w-0 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out mb-3 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
               aria-label="Search"
               aria-describedby="button-addon2"
-            /> */}
+  />*/}
             <label htmlFor="">Date</label>
             <input
               type="text"
@@ -126,31 +130,63 @@ function Addproduct() {
               aria-label="Search"
               aria-describedby="button-addon2"
             />
+            <label htmlFor="">Year of Birth</label>
             <input
-              type="file"
-              onChange={handleUpload}
-              className="w-full px-3  mb-3"
+              type="text"
+              name="age"
+              className="form-control relative flex-auto min-w-0 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out mb-4 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              aria-label="Search"
+              aria-describedby="button-addon2"
             />
-            {fileupload && (
+            <label htmlFor="">Gender</label>
+            <input
+              type="text"
+              name="gender"
+              className="form-control relative flex-auto min-w-0 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out mb-4 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              aria-label="Search"
+              aria-describedby="button-addon2"
+            />
+            <label htmlFor="">Patient Address</label>
+            <input
+              type="text"
+              name="address"
+              className="form-control relative flex-auto min-w-0 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out mb-4 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              aria-label="Search"
+              aria-describedby="button-addon2"
+            />
+            <label htmlFor="">Mobile Number</label>
+            <input
+              type="text"
+              name="mob"
+              className="form-control relative flex-auto min-w-0 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out mb-4 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              aria-label="Search"
+              aria-describedby="button-addon2"
+            />
+            {/* <input
+              type="file"
+              onChange={handleAddProduct}
+              className="w-full px-3  mb-3"
+            /> */}
+            {/* {fileupload && (
               <div className="my-3 bg-yellow-200 opacity-80 rounded-md p-3">
                 Uploading...
               </div>
-            )}
+            )} */}
+
             <button
               type="submit"
               className="btn inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700  focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
               id="button-addon2"
-              disabled={fileupload}
               onClick={() => setisOpen(true)}
             >
-              Add Product
+              Add Patient
             </button>
           </form>
 
           {/* Modal Section*/}
         </div>
       </div>
-      {isOpen && <Modal setIsOpen={setisOpen} pid={pid}/>}
+      {/* {isOpen && <Modal setIsOpen={setisOpen} pid={Patient2.getPid()} />} */}
     </div>
   );
 }

@@ -14,28 +14,32 @@ const handleAddLocation = async (e) => {
   await provider.send("eth_requestAccounts", []);
   const signer = await provider.getSigner();
   const Product = new ethers.Contract(
-    "0x9d607ea48fb9f9537e3f08ccbf8d4b9acb3638da",
+    "0xF5Abdc1d50117aB2e4908154EC78b1473B12c49F",
     abi,
     signer
   );
   console.log(data.get("pid"));
   console.log(data.get("loc"));
   console.log(data.get("date"));
-  await Product.updateItemLocation(
+  var t = await Product.addTreatment(
     parseInt(data.get("pid")),
     data.get("loc"),
     data.get("date")
   );
-  // console.log(response);
+  console.log(t);
 };
 
 function Updatelocation() {
-  const [ProductInfo, setProductInfo] = useState({
+  const [PatientInfo, setPatientInfo] = useState({
     creator: "",
-    productName: "",
-    productId: "",
+    patientName: "",
+    patientId: "",
     date: "",
-    states: [],
+    gender: "",
+    yearofbirth: "",
+    patientaddress: "",
+    mobilenumber: "",
+    treatments: [],
     dates: [],
     fileCid: "",
   });
@@ -46,28 +50,36 @@ function Updatelocation() {
 
     const provider = new ethers.providers.Web3Provider(window.ethereum);
 
-    const Product = new ethers.Contract(
-      "0x9d607ea48fb9f9537e3f08ccbf8d4b9acb3638da",
+    const Patient = new ethers.Contract(
+      "0xF5Abdc1d50117aB2e4908154EC78b1473B12c49F",
       abi,
       provider
     );
-    const response = await Product.getItem(parseInt(data.get("pid")));
+
+    console.log(parseInt(data.get("pid")));
+    const response = await Patient.getPatient(parseInt(data.get("pid")));
     console.log(response);
     const creator = response.creator;
-    const productName = response.productName;
-    const productId = response.productId.toNumber();
+    const patientName = response.patientName;
+    const patientId = response.patientId.toNumber();
     const date = response.date;
-    const states = response.states;
+    const gender = response.gender;
+    const yearofbirth = response.yearofbirth;
+    const patientaddress = response.patientaddress;
+    const mobilenumber = response.mobilenumber;
+    const treatments = response.treatments;
     const dates = response.dates;
-    const fileCid = response.fileCid;
-    setProductInfo({
+    setPatientInfo({
       creator: creator,
-      productName: productName,
-      productId: productId,
+      patientName: patientName,
+      patientId: patientId,
       date: date,
-      states: states,
+      gender: gender,
+      yearofbirth: yearofbirth,
+      patientaddress: patientaddress,
+      mobilenumber: mobilenumber,
+      treatments: treatments,
       dates: dates,
-      fileCid: fileCid,
     });
   };
 
@@ -77,7 +89,7 @@ function Updatelocation() {
       <div className="flex items-center justify-center pt-20 my-3">
         <div className="flex flex-col">
           <Searchbox handlePollData={handlePollData} />
-          <div className="my-5">
+          {/* <div className="my-5">
             <label className="flex items-center justify-center">
               <input
                 className="hidden"
@@ -89,19 +101,19 @@ function Updatelocation() {
               <img src="/logos/qr-code.png" alt="" />
               <p className="text-white ml-2">Scan QR</p>
             </label>
-          </div>
+          </div> */}
         </div>
       </div>
       <div>
         <div className="w-screen flex items-center justify-center ">
           <div className="bg-white rounded m-7 flex flex-col justify-center items-center px-10 py-4">
             <h2 className="text-gray-700 font-semibold text-lg mb-7 mt-3">
-              Please update location details
+              Please update treatment details
             </h2>
 
             <form className="flex flex-col" onSubmit={handleAddLocation}>
               <label className="text-sm pb-2 font-semibold" htmlFor="">
-                Product Name
+                Patient Name
               </label>
               <input
                 type="text"
@@ -109,12 +121,12 @@ function Updatelocation() {
                 class="form-control relative flex-auto min-w-0 block w-full px-3 py-1.5 text-base font-normal bg-gray-200 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out mb-3 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                 aria-label="Search"
                 aria-describedby="button-addon2"
-                value={ProductInfo.productName}
+                value={PatientInfo.patientName}
                 disabled={true}
               />
 
               <label className="text-sm pb-2 font-semibold" htmlFor="">
-                Product ID
+                Patient ID
               </label>
               <input
                 type="text"
@@ -123,10 +135,10 @@ function Updatelocation() {
                 aria-label="Search"
                 aria-describedby="button-addon2"
                 // disabled={true}
-                value={ProductInfo.productId}
+                value={PatientInfo.patientId}
               />
               <label className="text-sm pb-2 font-semibold" htmlFor="">
-                Location
+                Treatment
               </label>
               <input
                 type="text"
@@ -150,7 +162,7 @@ function Updatelocation() {
                 class="btn inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700  focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
                 id="button-addon2"
               >
-                Update Location
+                Update Treatment
               </button>
             </form>
 
